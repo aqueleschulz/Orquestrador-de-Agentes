@@ -1,0 +1,21 @@
+services:
+    lumina-engine:
+        build:build:
+            context: ./src/Lumina.Engine
+            dockerfile: dockerfile
+        ports:
+            - "5001:5001"
+        volumes:
+            - ./src/Lumina.Engine/data:/app/data
+    
+    lumina-api:
+        build:
+            context: ./src/Lumina.Server/Lumina.Api
+            dockerfile: dockerfile
+        ports:
+            - "5006:5006"
+        environment:
+            - EngineSettings__BaseUrl=http://lumina-engine:5001
+            - ASPNETCORE_ENVIRONMENT=Development
+        depends_on:
+        - lumina-engine
